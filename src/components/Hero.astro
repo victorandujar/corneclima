@@ -1,0 +1,75 @@
+---
+import { business } from '../data/business';
+---
+<section aria-labelledby="hero-t" class="relative isolate overflow-hidden border-b border-linea">
+  <!-- Aura de temperatura detrás del termostato -->
+  <div class="pointer-events-none absolute inset-0 -z-10 transition-[background] duration-500" style="background: radial-gradient(60rem 36rem at 50% 42%, color-mix(in oklch, var(--temp) 26%, transparent), transparent 70%);" aria-hidden="true"></div>
+
+  <div class="mx-auto max-w-[90rem] px-4 pb-16 pt-10 sm:px-8 sm:pt-14">
+    <p class="kicker flex flex-wrap justify-center gap-x-4 gap-y-1 text-tinta-2">
+      <span>Desde el año {business.since}</span><span aria-hidden="true">·</span><span>{business.city}</span><span aria-hidden="true">·</span>
+      <span>★ {String(business.google.rating).replace('.', ',')} en Google ({business.google.count} reseñas)</span>
+    </p>
+
+    <div class="mt-10 grid items-center justify-items-center gap-2 lg:grid-cols-[1fr_auto_1fr] lg:gap-6" data-thermo-root>
+      <span data-word="frio" class="cond select-none text-[clamp(4.5rem,16vw,13rem)] text-frio-tinta transition-[opacity,transform] duration-300 lg:justify-self-end" aria-hidden="true">Frío</span>
+
+      <!-- Termostato -->
+      <div class="relative grid h-[18rem] w-[18rem] place-items-center sm:h-[21rem] sm:w-[21rem]" data-thermo>
+        <div class="absolute inset-0 rounded-full [mask:radial-gradient(farthest-side,transparent_calc(100%-22px),#000_calc(100%-21px))]" style="background: conic-gradient(from 225deg, var(--color-frio) 0deg, #3b6cff 67.5deg, #8a4dff 135deg, #e0457b 202.5deg, var(--color-calor) 270deg, transparent 270deg);" aria-hidden="true"></div>
+        <div class="absolute inset-[30px] rounded-full bg-white shadow-[0_20px_60px_-20px_rgb(11_26_34/0.35)]" aria-hidden="true"></div>
+        <!-- Marcas -->
+        <svg viewBox="0 0 200 200" class="absolute inset-[30px] h-[calc(100%-60px)] w-[calc(100%-60px)] text-linea" aria-hidden="true">
+          {Array.from({ length: 15 }, (_, i) => {
+            const a = ((225 - i * (270 / 14)) * Math.PI) / 180;
+            const r1 = 88, r2 = i % 2 === 0 ? 78 : 82;
+            return <line x1={100 + r1 * Math.cos(a)} y1={100 - r1 * Math.sin(a)} x2={100 + r2 * Math.cos(a)} y2={100 - r2 * Math.sin(a)} stroke="currentColor" stroke-width="2" stroke-linecap="round" />;
+          })}
+        </svg>
+        <!-- Lectura -->
+        <div class="relative text-center" aria-hidden="true">
+          <p class="cond text-[5.5rem] leading-none tabular-nums sm:text-[6.5rem]"><span data-temp>22</span><span class="align-top text-[0.5em]">°</span></p>
+          <p class="kicker mt-1 temp-text" data-mode-label>Confort</p>
+        </div>
+        <!-- Mando: slider accesible -->
+        <div class="absolute inset-0" data-knob-track>
+          <button
+            type="button"
+            role="slider"
+            aria-label="Temperatura deseada"
+            aria-valuemin="16"
+            aria-valuemax="30"
+            aria-valuenow="22"
+            aria-valuetext="22 grados, confort"
+            data-knob
+            class="absolute left-1/2 top-1/2 h-10 w-10 cursor-grab touch-none rounded-full border-[5px] border-white bg-tinta shadow-lg active:cursor-grabbing"
+            style="--a: 0deg; transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r, 150px))) rotate(calc(-1 * var(--a)));"
+          ></button>
+        </div>
+        <div class="absolute -bottom-2 flex gap-3">
+          <button type="button" data-step="-1" class="grid h-11 w-11 place-items-center rounded-full border border-linea bg-white text-xl hover:bg-hielo-2" aria-label="Bajar un grado">−</button>
+          <button type="button" data-step="1" class="grid h-11 w-11 place-items-center rounded-full border border-linea bg-white text-xl hover:bg-hielo-2" aria-label="Subir un grado">+</button>
+        </div>
+      </div>
+
+      <span data-word="calor" class="cond select-none text-[clamp(4.5rem,16vw,13rem)] text-calor-tinta transition-[opacity,transform] duration-300 lg:justify-self-start" aria-hidden="true">Calor</span>
+    </div>
+
+    <div class="mx-auto mt-10 max-w-3xl text-center">
+      <h1 id="hero-t" class="text-2xl font-semibold leading-snug sm:text-3xl">
+        Aire acondicionado, calefacción y reformas integrales en Sant Joan Despí, Cornellà y el Baix Llobregat.
+      </h1>
+      <p class="mt-4 text-tinta-2" aria-live="polite" data-mode-text>Gira el termostato: te decimos qué instalación necesitas.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="#contacto" class="btn btn-temp">Pedir presupuesto</a>
+        <a href="#servicios" class="btn btn-line" data-mode-link>Ver servicios</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initThermostat } from '../scripts/thermostat';
+  const root = document.querySelector<HTMLElement>('[data-thermo-root]');
+  if (root) initThermostat(root);
+</script>

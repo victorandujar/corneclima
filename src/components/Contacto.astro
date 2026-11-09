@@ -1,0 +1,85 @@
+---
+import { business, telUrl } from '../data/business';
+const servicios = ['Aire acondicionado', 'Calefacción / caldera', 'Aerotermia', 'Reforma integral', 'Otro'];
+const field = 'w-full rounded-xl border border-white/25 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-frio focus:outline-none aria-[invalid=true]:border-calor';
+---
+<section id="contacto" aria-labelledby="contacto-t" class="on-dark bg-noche text-white">
+  <div class="mx-auto grid max-w-[90rem] gap-14 px-4 py-20 sm:px-8 sm:py-24 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h2 id="contacto-t" class="cond text-[clamp(2.75rem,7vw,5.5rem)]">Pide tu presupuesto</h2>
+      <p class="mt-6 max-w-sm text-lg text-white/80">Cuéntanos qué necesitas y te respondemos. También puedes llamarnos o pasar por la tienda.</p>
+      <dl class="mt-10 grid gap-6 text-lg">
+        <div><dt class="kicker text-white/60">Teléfonos</dt><dd class="mt-1">{business.phones.map((p) => <a href={telUrl(p.e164)} class="mr-5 font-semibold tabular-nums hover:underline">{p.display}</a>)}</dd></div>
+        <div><dt class="kicker text-white/60">Email</dt><dd class="mt-1"><a href={`mailto:${business.email}`} class="hover:underline">{business.email}</a></dd></div>
+        <div><dt class="kicker text-white/60">Tienda</dt><dd class="mt-1">{business.street}, {business.postalCode} {business.city} · <a class="underline underline-offset-4" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Corneclima ${business.street} ${business.city}`)}`} rel="noopener" target="_blank">Cómo llegar</a></dd></div>
+        <div><dt class="kicker text-white/60">Horario</dt><dd class="mt-1 grid gap-1 text-base">{business.hours.map((h) => <span><span class="inline-block w-32 text-white/70">{h.days}</span>{h.time}</span>)}</dd></div>
+      </dl>
+    </div>
+
+    <form id="quote-form" class="grid content-start gap-6 lg:col-span-6 lg:col-start-7" novalidate>
+      <fieldset>
+        <legend class="kicker mb-3 text-white/70">¿Qué necesitas?</legend>
+        <div class="flex flex-wrap gap-2">
+          {servicios.map((s, i) => (
+            <label class="cursor-pointer">
+              <input type="radio" name="tipo" value={s} class="peer sr-only" checked={i === 0} />
+              <span class="inline-flex min-h-11 items-center rounded-full border border-white/30 px-4 text-white transition-colors peer-checked:border-white peer-checked:bg-white peer-checked:text-tinta peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-frio">{s}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label for="nombre" class="kicker text-white/70">Nombre</label>
+          <input id="nombre" name="nombre" autocomplete="given-name" required maxlength="60" class:list={[field, 'mt-2']} aria-describedby="err-nombre" />
+          <p id="err-nombre" class="mt-1 min-h-5 text-sm text-calor" aria-live="polite"></p>
+        </div>
+        <div>
+          <label for="municipio" class="kicker text-white/70">Municipio</label>
+          <input id="municipio" name="municipio" autocomplete="address-level2" required maxlength="60" placeholder="Ej.: Cornellà" class:list={[field, 'mt-2']} aria-describedby="err-municipio" />
+          <p id="err-municipio" class="mt-1 min-h-5 text-sm text-calor" aria-live="polite"></p>
+        </div>
+      </div>
+      <div>
+        <label for="detalle" class="kicker text-white/70">Detalles <span class="text-white/50">(opcional)</span></label>
+        <textarea id="detalle" name="detalle" rows="3" maxlength="600" placeholder="Ej.: piso de 80 m², quiero aire por conductos" class:list={[field, 'mt-2 resize-y']} aria-describedby="err-detalle"></textarea>
+        <p id="err-detalle" class="mt-1 min-h-5 text-sm text-calor" aria-live="polite"></p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="submit" name="via" value="whatsapp" class="btn bg-white text-tinta hover:bg-frio">Enviar por WhatsApp</button>
+        <button type="submit" name="via" value="email" class="btn btn-line">Enviar por email</button>
+      </div>
+      <p class="text-sm text-white/60">El formulario solo prepara el mensaje en tu WhatsApp o tu correo. Esta web no guarda tus datos.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { business, whatsappUrl } from '../data/business';
+  const form = document.querySelector<HTMLFormElement>('#quote-form');
+  const clean = (v: FormDataEntryValue | null): string => (typeof v === 'string' ? v.trim() : '');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const submitter = (e as SubmitEvent).submitter as HTMLButtonElement | null;
+    const data = new FormData(form);
+    const q = { tipo: clean(data.get('tipo')), nombre: clean(data.get('nombre')), municipio: clean(data.get('municipio')), detalle: clean(data.get('detalle')) };
+    const errors: Record<string, string> = {};
+    if (q.nombre.length < 2) errors.nombre = 'Escribe tu nombre.';
+    if (q.municipio.length < 2) errors.municipio = 'Indica el municipio.';
+    for (const k of ['nombre', 'municipio', 'detalle']) {
+      const out = form.querySelector(`#err-${k}`);
+      if (out) out.textContent = errors[k] ?? '';
+      form.querySelector(`[name="${k}"]`)?.setAttribute('aria-invalid', String(Boolean(errors[k])));
+    }
+    const first = Object.keys(errors)[0];
+    if (first) { form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus(); return; }
+
+    const body = [`Hola, soy ${q.nombre}.`, `Necesito: ${q.tipo}.`, `Municipio: ${q.municipio}.`, q.detalle && `Detalles: ${q.detalle}`].filter(Boolean).join('\n');
+    if (submitter?.value === 'email') {
+      window.location.href = `mailto:${business.email}?subject=${encodeURIComponent(`Presupuesto: ${q.tipo}`)}&body=${encodeURIComponent(body)}`;
+    } else {
+      window.open(whatsappUrl(body), '_blank', 'noopener');
+    }
+  });
+</script>

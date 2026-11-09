@@ -1,0 +1,70 @@
+---
+import { Image } from 'astro:assets';
+import { trabajos } from '../data/trabajos';
+import { business } from '../data/business';
+const tone = { frio: 'bg-frio', calor: 'bg-calor', obra: 'bg-tinta-2' } as const;
+const modoLabel = { frio: 'Climatización', calor: 'Calefacción', obra: 'Obra' } as const;
+---
+<section id="trabajos" aria-labelledby="trabajos-t" class="on-dark bg-noche text-white">
+  <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <h2 id="trabajos-t" class="cond text-[clamp(2.75rem,7vw,5.5rem)]">Trabajos reales,<br />paso a paso</h2>
+      <p class="max-w-md text-white/75">Fotos de nuestras obras: desde que se abre el techo hasta que se entrega. Elige un trabajo y recorre sus fases.</p>
+    </div>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-12" data-trabajos>
+      <div role="tablist" aria-label="Trabajos" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:col-span-4 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+        {trabajos.map((t, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${t.id}`}
+            aria-controls={`panel-${t.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            class="group shrink-0 rounded-xl border border-white/15 px-4 py-3 text-left transition-colors hover:border-white/40 aria-selected:border-white aria-selected:bg-white aria-selected:text-tinta lg:w-full lg:px-5 lg:py-4"
+          >
+            <span class="kicker flex items-center gap-2 text-[0.8rem] opacity-75"><span class:list={['h-2 w-2 rounded-full', tone[t.modo]]} aria-hidden="true"></span>{modoLabel[t.modo]} · {t.pasos.length} fotos</span>
+            <span class="mt-1 block whitespace-nowrap text-lg font-semibold leading-tight lg:whitespace-normal">{t.title}</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="min-w-0 lg:col-span-8">
+        {trabajos.map((t, i) => (
+          <div role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} hidden={i !== 0} data-panel tabindex="0">
+            <figure>
+              <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white/5">
+                {t.pasos.map((p, j) => (
+                  <Image src={p.img} alt={p.alt} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 60vw, 100vw" data-foto={j} class:list={['absolute inset-0 h-full w-full object-cover transition-opacity duration-300', j === 0 ? 'opacity-100' : 'opacity-0']} loading={i === 0 && j === 0 ? 'eager' : 'lazy'} />
+                ))}
+                <span class="kicker absolute left-4 top-4 rounded-full bg-noche/80 px-3 py-1 text-[0.8rem]" data-fase>{t.pasos[0]?.label}</span>
+              </div>
+              <!-- Fases -->
+              <ol class="mt-4 grid gap-2" style={`grid-template-columns: repeat(${t.pasos.length}, minmax(0, 1fr));`} aria-label="Fases del trabajo">
+                {t.pasos.map((p, j) => (
+                  <li>
+                    <button type="button" data-paso={j} aria-pressed={j === 0 ? 'true' : 'false'} data-label={p.label} class="group w-full text-left">
+                      <span class="block h-1.5 rounded-full bg-white/20 transition-colors group-aria-pressed:temp-bg"></span>
+                      <span class="kicker mt-2 block truncate text-[0.75rem] text-white/70 group-aria-pressed:text-white">{String(j + 1).padStart(2, '0')} {p.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+              <figcaption class="mt-6 grid gap-2 sm:grid-cols-[auto_1fr] sm:gap-8">
+                <p class="cond text-3xl">{t.title}{t.lugar && <span class="block text-lg text-white/60">{t.lugar}</span>}</p>
+                <p class="text-white/80">{t.text}</p>
+              </figcaption>
+            </figure>
+          </div>
+        ))}
+      </div>
+    </div>
+    <p class="kicker mt-12 text-[0.8rem] text-white/60">Más trabajos en <a href={business.instagram} rel="noopener" target="_blank" class="underline underline-offset-4">@instalaciones_corneclima</a></p>
+  </div>
+</section>
+
+<script>
+  import { initTrabajos } from '../scripts/trabajos';
+  document.querySelectorAll<HTMLElement>('[data-trabajos]').forEach(initTrabajos);
+</script>

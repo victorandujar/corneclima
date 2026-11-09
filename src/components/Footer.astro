@@ -1,0 +1,25 @@
+---
+import Logo from './Logo.astro';
+import { business, telUrl } from '../data/business';
+import { isDemo } from '../lib/site';
+---
+<footer class="on-dark border-t border-white/10 bg-noche pb-24 text-white md:pb-0">
+  <div class="mx-auto max-w-[90rem] px-4 py-14 sm:px-8">
+    <Logo variant="completo" class="h-16 text-frio sm:h-20" />
+    <div class="mt-10 grid gap-8 border-t border-white/15 pt-8 text-white/80 sm:grid-cols-2 lg:grid-cols-4">
+      <div><p class="kicker text-white/50">Empresa</p><p class="mt-2">{business.legalName}<br />Desde el año {business.since}</p></div>
+      <div><p class="kicker text-white/50">Contacto</p><p class="mt-2">{business.phones.map((p) => <><a href={telUrl(p.e164)} class="tabular-nums hover:underline">{p.display}</a><br /></>)}<a href={`mailto:${business.email}`} class="hover:underline">{business.email}</a></p></div>
+      <div><p class="kicker text-white/50">Zona</p><p class="mt-2">{business.areaServed.join(' · ')}</p></div>
+      <nav aria-label="Legal y redes"><p class="kicker text-white/50">Más</p><ul class="mt-2">
+        <li><a href={business.instagram} rel="noopener" target="_blank" class="hover:underline">Instagram</a></li>
+        <li><a href={business.facebook} rel="noopener" target="_blank" class="hover:underline">Facebook</a></li>
+        <li><a href="/aviso-legal" class="hover:underline">Aviso legal</a></li>
+        <li><a href="/privacidad" class="hover:underline">Privacidad</a></li>
+      </ul></nav>
+    </div>
+    <p class="kicker mt-12 flex flex-wrap justify-between gap-4 text-[0.75rem] text-white/50">
+      <span>© {new Date().getFullYear()} {business.legalName}</span>
+      {isDemo && <span>Propuesta no oficial · Web Local Growth</span>}
+    </p>
+  </div>
+</footer>

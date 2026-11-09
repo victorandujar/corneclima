@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import Trabajos from '../components/Trabajos.astro';
+import Financiacion from '../components/Financiacion.astro';
+import Reviews from '../components/Reviews.astro';
+import Contacto from '../components/Contacto.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+---
+<Base
+  title="Corneclima · Aire acondicionado, calefacción y reformas en Sant Joan Despí"
+  description="Instaladores de aire acondicionado, calderas y aerotermia y empresa de reformas integrales en Sant Joan Despí, Cornellà y el Baix Llobregat desde el año 2000. Financiación hasta 24 meses sin intereses."
+  schema
+>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <Services />
+    <Trabajos />
+    <Reviews />
+    <Financiacion />
+    <Contacto />
+  </main>
+  <Footer />
+  <MobileBar />
+</Base>
