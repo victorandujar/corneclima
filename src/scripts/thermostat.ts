@@ -79,8 +79,8 @@ export const initThermostat = (root: HTMLElement): void => {
     knob.setAttribute('aria-valuetext', `${temp} grados, ${COPY[m].label.toLowerCase()}`);
     tempEl.textContent = String(temp);
     labelEl.textContent = COPY[m].label;
-    if (frio) { frio.style.opacity = String(0.25 + 0.75 * (1 - t)); frio.style.transform = `scale(${0.92 + 0.08 * (1 - t)})`; }
-    if (calor) { calor.style.opacity = String(0.25 + 0.75 * t); calor.style.transform = `scale(${0.92 + 0.08 * t})`; }
+    if (frio) { frio.style.opacity = String(0.18 + 0.82 * (1 - t)); frio.style.transform = `scale(${0.9 + 0.1 * (1 - t)})`; frio.style.filter = `blur(${(t * 3).toFixed(1)}px)`; }
+    if (calor) { calor.style.opacity = String(0.18 + 0.82 * t); calor.style.transform = `scale(${0.9 + 0.1 * t})`; calor.style.filter = `blur(${((1 - t) * 3).toFixed(1)}px)`; }
     if (touched && textEl) textEl.textContent = COPY[m].text;
     if (touched && linkEl) { linkEl.href = COPY[m].href; linkEl.textContent = COPY[m].cta; }
     document.querySelectorAll<HTMLElement>('[data-servicio]').forEach((el) => {
