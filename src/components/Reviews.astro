@@ -8,14 +8,15 @@ const tone = { frio: 'bg-frio', calor: 'bg-calor', obra: 'bg-tinta-2' } as const
   <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-24">
     <div class="grid gap-10 lg:grid-cols-12">
       <div class="lg:col-span-4">
-        <h2 id="resenas-t" class="cond text-[clamp(2.75rem,6vw,4.5rem)]">Lo que dicen en Google</h2>
-        <p class="mt-6 flex items-end gap-3"><span class="cond text-7xl">{String(business.google.rating).replace('.', ',')}</span><span class="pb-2 text-tinta-2">sobre 5 · {business.google.count} reseñas</span></p>
+        <h2 id="resenas-t" class="cond text-[clamp(3rem,7vw,5.5rem)]" data-reveal>Lo que dicen en Google</h2>
+        <p class="mt-6 flex items-end gap-3" data-reveal style="--i:1"><span class="cond text-8xl">{String(business.google.rating).replace('.', ',')}</span><span class="pb-2 text-tinta-2">sobre 5 · {business.google.count} reseñas</span></p>
       </div>
       <ul class="grid gap-6 md:grid-cols-3 lg:col-span-8">
-        {reviews.map((r) => (
-          <li class="flex flex-col border-t-4 border-tinta pt-5">
+        {reviews.map((r, i) => (
+          <li class="relative flex flex-col rounded-2xl bg-hielo p-6 pt-12 transition-transform duration-300 hover:-translate-y-1" data-reveal style={`--i:${i + 1}`}>
+            <span class="cond pointer-events-none absolute left-5 top-0 text-8xl leading-none text-tinta/10" aria-hidden="true">“</span>
             <span class:list={['mb-4 h-1.5 w-10 rounded-full', tone[r.tema]]} aria-hidden="true"></span>
-            <blockquote class="flex-1 text-lg leading-relaxed">“{r.text}”</blockquote>
+            <blockquote class="flex-1 text-lg leading-relaxed">{r.text}</blockquote>
             <p class="kicker mt-5 text-tinta-2">{r.author} · {fmt(r.date)}</p>
           </li>
         ))}

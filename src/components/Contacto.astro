@@ -6,7 +6,7 @@ const field = 'w-full rounded-xl border border-white/25 bg-white/5 px-4 py-3 tex
 <section id="contacto" aria-labelledby="contacto-t" class="on-dark bg-noche text-white">
   <div class="mx-auto grid max-w-[90rem] gap-14 px-4 py-20 sm:px-8 sm:py-24 lg:grid-cols-12">
     <div class="lg:col-span-5">
-      <h2 id="contacto-t" class="cond text-[clamp(2.75rem,7vw,5.5rem)]">Pide tu presupuesto</h2>
+      <h2 id="contacto-t" class="cond text-[clamp(3rem,8vw,6.5rem)]" data-reveal>Pide tu presupuesto</h2>
       <p class="mt-6 max-w-sm text-lg text-white/80">Cuéntanos qué necesitas y te respondemos. También puedes llamarnos o pasar por la tienda.</p>
       <dl class="mt-10 grid gap-6 text-lg">
         <div><dt class="kicker text-white/60">Teléfonos</dt><dd class="mt-1">{business.phones.map((p) => <a href={telUrl(p.e164)} class="mr-5 font-semibold tabular-nums hover:underline">{p.display}</a>)}</dd></div>
@@ -16,7 +16,7 @@ const field = 'w-full rounded-xl border border-white/25 bg-white/5 px-4 py-3 tex
       </dl>
     </div>
 
-    <form id="quote-form" class="grid content-start gap-6 lg:col-span-6 lg:col-start-7" novalidate>
+    <form id="quote-form" class="grid content-start gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8 lg:col-span-6 lg:col-start-7" novalidate data-reveal style="--i:1">
       <fieldset>
         <legend class="kicker mb-3 text-white/70">¿Qué necesitas?</legend>
         <div class="flex flex-wrap gap-2">

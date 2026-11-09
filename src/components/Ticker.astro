@@ -1,0 +1,26 @@
+---
+import { business } from '../data/business';
+const items = [
+  `Desde el año ${business.since}`,
+  'Aire acondicionado',
+  `★ ${String(business.google.rating).replace('.', ',')} en Google`,
+  'Calderas y calefacción',
+  'Financiación 24 meses sin intereses',
+  'Aerotermia',
+  'Obras llave en mano',
+  ...business.areaServed.slice(0, 4),
+];
+---
+<div class="relative overflow-hidden border-y border-white/10 bg-noche py-5 text-white" aria-label="Datos de Corneclima">
+  <div class="marquee flex w-max">
+    {[0, 1].map((copy) => (
+      <ul class="flex shrink-0 items-center" aria-hidden={copy === 1 ? 'true' : undefined}>
+        {items.map((it) => (
+          <li class="cond flex items-center whitespace-nowrap px-6 text-2xl text-white/85 sm:text-3xl">
+            {it}<span class="ml-12 inline-block h-2.5 w-2.5 rotate-45" style="background: var(--temp)" aria-hidden="true"></span>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>

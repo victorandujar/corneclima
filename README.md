@@ -13,7 +13,7 @@
 
 | | Web actual | Esta propuesta |
 |---|---|---|
-| Lighthouse móvil | Rendimiento 74 · Accesibilidad 77 · Buenas prácticas 96 · SEO 100 | **99 · 100 · 100 · 100** |
+| Lighthouse móvil | Rendimiento 74 · Accesibilidad 77 · Buenas prácticas 96 · SEO 100 | **99 · 100 · 100 · 100** (con animaciones) |
 | LCP móvil | 5,0 s | 0,8 s |
 
 Además, en la web actual:
@@ -30,12 +30,20 @@ Además, en la web actual:
 
 ## Funcionalidades
 
+- **Portada oscura con "aire"** (`src/scripts/airflow.ts`):
+  - Partículas en canvas que salen del termostato: copos que caen en frío y brasas que suben en calor, con el color de la temperatura. El dial tiene un halo de luz.
+  - Se detiene fuera de pantalla, con la pestaña oculta y con `prefers-reduced-motion`.
 - **Termostato** (`Hero.astro` + `src/scripts/thermostat.ts`):
   - Se arrastra el mando, se usan los botones ± o el teclado (flechas, Re Pág/Av Pág, Inicio/Fin). Es un `role="slider"` con `aria-valuetext`.
   - Según la temperatura recomienda el servicio adecuado y lo resalta en la página.
   - Al cargar hace un barrido corto para mostrar que se puede girar, salvo con `prefers-reduced-motion`.
-- **Trabajos paso a paso** (`Trabajos.astro` + `src/scripts/trabajos.ts`):
-  - Pestañas ARIA con navegación por flechas. Cada trabajo se recorre por fases con clic, al pasar el ratón, con flechas o deslizando en móvil.
+- **Banda en movimiento** con datos reales (desde 2000, 4,7★, financiación, municipios). Se pausa al pasar el ratón.
+- **Trabajos tipo "stories"** (`Trabajos.astro` + `src/scripts/trabajos.ts`):
+  - Mientras la sección está en pantalla, las fases avanzan solas con barra de progreso y luego pasa al siguiente trabajo.
+  - Se pausa con el ratón encima y se detiene en cuanto el usuario interactúa.
+  - Pestañas ARIA, flechas y deslizamiento en móvil.
+- **Entradas al hacer scroll** (`src/scripts/reveal.ts`): textos que suben, fotos que se destapan y tarjetas escalonadas. Sin JS todo es visible; con movimiento reducido no hay animación.
+- **Financiación:** el "24" cuenta hacia arriba al aparecer.
 - **Reseñas de Google:** citas literales de las que el propio negocio muestra en su web.
 - **Contacto:** el formulario valida y prepara el mensaje para WhatsApp o para email. No hay backend.
 - **SEO:**
