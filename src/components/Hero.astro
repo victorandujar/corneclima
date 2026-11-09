@@ -1,38 +1,36 @@
 ---
 import { business } from '../data/business';
 ---
-<section aria-labelledby="hero-t" class="relative isolate overflow-hidden border-b border-linea">
-  <!-- Aura de temperatura detrás del termostato -->
-  <div class="pointer-events-none absolute inset-0 -z-10 transition-[background] duration-500" style="background: radial-gradient(60rem 36rem at 50% 42%, color-mix(in oklch, var(--temp) 26%, transparent), transparent 70%);" aria-hidden="true"></div>
+<section aria-labelledby="hero-t" class="on-dark relative isolate overflow-hidden bg-noche text-white">
+  <!-- Aire: partículas que salen del termostato (canvas decorativo) -->
+  <canvas data-airflow class="pointer-events-none absolute inset-0 -z-10 h-full w-full" aria-hidden="true"></canvas>
+  <div class="pointer-events-none absolute inset-0 -z-20 transition-[background] duration-700" style="background: radial-gradient(52rem 34rem at 50% 44%, color-mix(in srgb, var(--temp) 30%, transparent), transparent 70%), radial-gradient(120rem 60rem at 50% 120%, #0f2a38, transparent 60%);" aria-hidden="true"></div>
 
-  <div class="mx-auto max-w-[90rem] px-4 pb-16 pt-10 sm:px-8 sm:pt-14">
-    <p class="kicker flex flex-wrap justify-center gap-x-4 gap-y-1 text-tinta-2">
+  <div class="mx-auto flex min-h-[calc(100svh-6.25rem)] max-w-[90rem] flex-col justify-center px-4 pb-24 pt-10 sm:px-8 md:pb-16">
+    <p class="kicker flex flex-wrap justify-center gap-x-4 gap-y-1 text-white/70">
       <span>Desde el año {business.since}</span><span aria-hidden="true">·</span><span>{business.city}</span><span aria-hidden="true">·</span>
       <span>★ {String(business.google.rating).replace('.', ',')} en Google ({business.google.count} reseñas)</span>
     </p>
 
-    <div class="mt-10 grid items-center justify-items-center gap-2 lg:grid-cols-[1fr_auto_1fr] lg:gap-6" data-thermo-root>
-      <span data-word="frio" class="cond select-none text-[clamp(4.5rem,16vw,13rem)] text-frio-tinta transition-[opacity,transform] duration-300 lg:justify-self-end" aria-hidden="true">Frío</span>
+    <div class="mt-10 grid items-center justify-items-center gap-2 lg:grid-cols-[1fr_auto_1fr] lg:gap-8" data-thermo-root>
+      <span data-word="frio" class="cond select-none text-[clamp(4.5rem,16vw,13.5rem)] text-frio [text-shadow:0_0_60px_rgb(0_204_255/0.45)] transition-[opacity,transform,filter] duration-300 lg:justify-self-end" aria-hidden="true">Frío</span>
 
-      <!-- Termostato -->
-      <div class="relative grid h-[18rem] w-[18rem] place-items-center sm:h-[21rem] sm:w-[21rem]" data-thermo>
-        <div class="absolute inset-0 rounded-full [mask:radial-gradient(farthest-side,transparent_calc(100%-22px),#000_calc(100%-21px))]" style="background: conic-gradient(from 225deg, var(--color-frio) 0deg, #3b6cff 67.5deg, #8a4dff 135deg, #e0457b 202.5deg, var(--color-calor) 270deg, transparent 270deg);" aria-hidden="true"></div>
-        <div class="absolute inset-[30px] rounded-full bg-white shadow-[0_20px_60px_-20px_rgb(11_26_34/0.35)]" aria-hidden="true"></div>
-        <!-- Marcas -->
-        <svg viewBox="0 0 200 200" class="absolute inset-[30px] h-[calc(100%-60px)] w-[calc(100%-60px)] text-linea" aria-hidden="true">
-          {Array.from({ length: 15 }, (_, i) => {
-            const a = ((225 - i * (270 / 14)) * Math.PI) / 180;
-            const r1 = 88, r2 = i % 2 === 0 ? 78 : 82;
-            return <line x1={100 + r1 * Math.cos(a)} y1={100 - r1 * Math.sin(a)} x2={100 + r2 * Math.cos(a)} y2={100 - r2 * Math.sin(a)} stroke="currentColor" stroke-width="2" stroke-linecap="round" />;
+      <div class="relative grid h-[18rem] w-[18rem] place-items-center sm:h-[22rem] sm:w-[22rem]" data-thermo>
+        <div class="halo absolute -inset-10 rounded-full blur-3xl transition-[background] duration-500" style="background: radial-gradient(closest-side, color-mix(in srgb, var(--temp) 55%, transparent), transparent);" aria-hidden="true"></div>
+        <div class="absolute inset-0 rounded-full [mask:radial-gradient(farthest-side,transparent_calc(100%-22px),#000_calc(100%-21px))]" style="background: conic-gradient(from 225deg, var(--color-frio) 0deg, #3b6cff 67.5deg, #8a4dff 135deg, #e0457b 202.5deg, var(--color-calor) 270deg, rgb(255 255 255 / 0.08) 270deg);" aria-hidden="true"></div>
+        <div class="absolute inset-[30px] rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_30%,#1d3442,#0b1a22_70%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.08),0_30px_80px_-20px_rgb(0_0_0/0.8)]" aria-hidden="true"></div>
+        <svg viewBox="0 0 200 200" class="absolute inset-[30px] h-[calc(100%-60px)] w-[calc(100%-60px)] text-white/20" aria-hidden="true">
+          {Array.from({ length: 29 }, (_, i) => {
+            const a = ((225 - i * (270 / 28)) * Math.PI) / 180;
+            const r1 = 90, r2 = i % 2 === 0 ? 80 : 85;
+            return <line x1={100 + r1 * Math.cos(a)} y1={100 - r1 * Math.sin(a)} x2={100 + r2 * Math.cos(a)} y2={100 - r2 * Math.sin(a)} stroke="currentColor" stroke-width={i % 2 === 0 ? 2 : 1} stroke-linecap="round" />;
           })}
         </svg>
-        <!-- Lectura -->
         <div class="relative text-center" aria-hidden="true">
-          <p class="cond text-[5.5rem] leading-none tabular-nums sm:text-[6.5rem]"><span data-temp>22</span><span class="align-top text-[0.5em]">°</span></p>
-          <p class="kicker mt-1 temp-text" data-mode-label>Confort</p>
+          <p class="cond text-[5.5rem] leading-none tabular-nums sm:text-[7rem]"><span data-temp>22</span><span class="align-top text-[0.45em]" style="color: var(--temp)">°</span></p>
+          <p class="kicker mt-1" style="color: var(--temp)" data-mode-label>Confort</p>
         </div>
-        <!-- Mando: slider accesible -->
-        <div class="absolute inset-0" data-knob-track>
+        <div class="absolute inset-0">
           <button
             type="button"
             role="slider"
@@ -42,26 +40,26 @@ import { business } from '../data/business';
             aria-valuenow="22"
             aria-valuetext="22 grados, confort"
             data-knob
-            class="absolute left-1/2 top-1/2 h-10 w-10 cursor-grab touch-none rounded-full border-[5px] border-white bg-tinta shadow-lg active:cursor-grabbing"
-            style="--a: 0deg; transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r, 150px))) rotate(calc(-1 * var(--a)));"
+            class="absolute left-1/2 top-1/2 h-10 w-10 cursor-grab touch-none rounded-full border-[5px] border-white shadow-[0_0_0_6px_rgb(255_255_255/0.12),0_0_30px_var(--temp)] active:cursor-grabbing"
+            style="--a: 0deg; background: var(--temp); transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r, 150px))) rotate(calc(-1 * var(--a)));"
           ></button>
         </div>
-        <div class="absolute -bottom-2 flex gap-3">
-          <button type="button" data-step="-1" class="grid h-11 w-11 place-items-center rounded-full border border-linea bg-white text-xl hover:bg-hielo-2" aria-label="Bajar un grado">−</button>
-          <button type="button" data-step="1" class="grid h-11 w-11 place-items-center rounded-full border border-linea bg-white text-xl hover:bg-hielo-2" aria-label="Subir un grado">+</button>
+        <div class="absolute -bottom-3 flex gap-3">
+          <button type="button" data-step="-1" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/5 text-xl backdrop-blur hover:bg-white/15" aria-label="Bajar un grado">−</button>
+          <button type="button" data-step="1" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/5 text-xl backdrop-blur hover:bg-white/15" aria-label="Subir un grado">+</button>
         </div>
       </div>
 
-      <span data-word="calor" class="cond select-none text-[clamp(4.5rem,16vw,13rem)] text-calor-tinta transition-[opacity,transform] duration-300 lg:justify-self-start" aria-hidden="true">Calor</span>
+      <span data-word="calor" class="cond select-none text-[clamp(4.5rem,16vw,13.5rem)] text-calor [text-shadow:0_0_60px_rgb(248_122_28/0.45)] transition-[opacity,transform,filter] duration-300 lg:justify-self-start" aria-hidden="true">Calor</span>
     </div>
 
-    <div class="mx-auto mt-10 max-w-3xl text-center">
-      <h1 id="hero-t" class="text-2xl font-semibold leading-snug sm:text-3xl">
+    <div class="mx-auto mt-12 max-w-3xl text-center">
+      <h1 id="hero-t" class="text-2xl font-semibold leading-snug sm:text-[2rem]">
         Aire acondicionado, calefacción y reformas integrales en Sant Joan Despí, Cornellà y el Baix Llobregat.
       </h1>
-      <p class="mt-4 text-tinta-2" aria-live="polite" data-mode-text>Gira el termostato: te decimos qué instalación necesitas.</p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="#contacto" class="btn btn-temp">Pedir presupuesto</a>
+      <p class="mt-4 min-h-[3.2em] text-white/75" aria-live="polite" data-mode-text>Gira el termostato: te decimos qué instalación necesitas.</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a href="#contacto" class="btn bg-white text-tinta shadow-[0_0_40px_-8px_var(--temp)] hover:bg-[var(--temp)]">Pedir presupuesto</a>
         <a href="#servicios" class="btn btn-line" data-mode-link>Ver servicios</a>
       </div>
     </div>
@@ -70,6 +68,10 @@ import { business } from '../data/business';
 
 <script>
   import { initThermostat } from '../scripts/thermostat';
+  import { initAirflow } from '../scripts/airflow';
   const root = document.querySelector<HTMLElement>('[data-thermo-root]');
   if (root) initThermostat(root);
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-airflow]');
+  const dial = document.querySelector<HTMLElement>('[data-thermo]');
+  if (canvas && dial) initAirflow(canvas, dial);
 </script>
