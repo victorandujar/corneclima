@@ -1,0 +1,13 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { business } from '../data/business';
+---
+<Legal title={`Privacidad · ${business.name}`} description={`Política de privacidad del sitio web de ${business.legalName}.`} heading="Privacidad">
+  <h2>Formulario de presupuesto</h2>
+  <p>El formulario no envía ni guarda datos en este sitio: prepara un mensaje que se abre en tu WhatsApp o tu correo. Solo si decides enviarlo, {business.legalName} lo recibe para responder a tu solicitud.</p>
+  <h2>Cookies</h2>
+  <p>Este sitio no usa cookies de analítica ni de publicidad.</p>
+  <h2>Responsable y derechos</h2>
+  <p>{business.legalName}, {business.street}, {business.city}. Puedes ejercer tus derechos escribiendo a {business.email}.</p>
+  <p class="kicker text-tinta-2">Documento provisional: se revisa con el titular antes de publicar.</p>
+</Legal>

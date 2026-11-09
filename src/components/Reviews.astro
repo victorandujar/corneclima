@@ -1,0 +1,25 @@
+---
+import { reviews } from '../data/reviews';
+import { business } from '../data/business';
+const fmt = (d: string): string => new Date(d).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+const tone = { frio: 'bg-frio', calor: 'bg-calor', obra: 'bg-tinta-2' } as const;
+---
+<section aria-labelledby="resenas-t" class="border-b border-linea bg-white">
+  <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="resenas-t" class="cond text-[clamp(2.75rem,6vw,4.5rem)]">Lo que dicen en Google</h2>
+        <p class="mt-6 flex items-end gap-3"><span class="cond text-7xl">{String(business.google.rating).replace('.', ',')}</span><span class="pb-2 text-tinta-2">sobre 5 · {business.google.count} reseñas</span></p>
+      </div>
+      <ul class="grid gap-6 md:grid-cols-3 lg:col-span-8">
+        {reviews.map((r) => (
+          <li class="flex flex-col border-t-4 border-tinta pt-5">
+            <span class:list={['mb-4 h-1.5 w-10 rounded-full', tone[r.tema]]} aria-hidden="true"></span>
+            <blockquote class="flex-1 text-lg leading-relaxed">“{r.text}”</blockquote>
+            <p class="kicker mt-5 text-tinta-2">{r.author} · {fmt(r.date)}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
