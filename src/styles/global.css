@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import "@fontsource/barlow/latin-400.css";
+@import "@fontsource/barlow/latin-500.css";
+@import "@fontsource/barlow/latin-600.css";
+@import "@fontsource/barlow-condensed/latin-600.css";
+@import "@fontsource/barlow-condensed/latin-700.css";
+
+/* ——— Corneclima · "Frío / Calor" ———
+   frio: cian del logotipo · calor: naranja de su exposición de calderas.
+   --t (0 = frío, 1 = calor) lo mueve el termostato y tiñe acentos de la página. */
+@theme {
+  --color-hielo: #f3f7f9;      /* fondo */
+  --color-hielo-2: #e6eef2;
+  --color-linea: #cfdce3;
+  --color-tinta: #0b1a22;      /* texto */
+  --color-tinta-2: #3d5260;    /* secundario (AA) */
+  --color-noche: #08141b;
+  --color-frio: #00ccff;       /* logotipo */
+  --color-frio-tinta: #00698a; /* cian para texto, AA sobre hielo */
+  --color-calor: #f87a1c;      /* exposición */
+  --color-calor-tinta: #a8470a;
+
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-cond: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
+}
+
+:root {
+  --t: 0.35;
+  /* Escala térmica (como una cámara térmica): cian → azul → violeta → rosa → naranja.
+     El termostato calcula --temp; --temp-tinta es su versión oscura para texto (AA). */
+  --temp: #6a5cff;
+  --temp-tinta: color-mix(in srgb, var(--temp) 60%, #000);
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+  body {
+    background: var(--color-hielo);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--color-frio); color: var(--color-tinta); }
+  :focus-visible { outline: 3px solid var(--color-frio-tinta); outline-offset: 3px; }
+}
+
+@layer components {
+  .cond {
+    font-family: var(--font-cond);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .kicker {
+    font-family: var(--font-cond);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-family: var(--font-cond);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 200ms, color 200ms, box-shadow 200ms;
+  }
+  .btn-temp { background: var(--color-tinta); color: #fff; box-shadow: inset 0 -3px 0 var(--temp); }
+  .btn-temp:hover { background: var(--temp); color: var(--color-tinta); }
+  .btn-line { border: 1.5px solid currentColor; }
+  .btn-line:hover { background: var(--color-tinta); color: #fff; border-color: var(--color-tinta); }
+  .on-dark .btn-line:hover { background: #fff; color: var(--color-tinta); border-color: #fff; }
+}
+
+@utility temp-text { color: var(--temp-tinta); }
+@utility temp-bg { background: var(--temp); }
